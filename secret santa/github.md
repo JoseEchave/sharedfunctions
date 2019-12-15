@@ -71,7 +71,7 @@ for the shuffling taken from:
                recipient = c(tail(shuffle_names, -1), shuffle_names[1])) %>% 
       left_join(names_email,by = c("sender" = "name"))
 
-    walk2(gifts_assigned$email,gifts_assigned$recipient,~send_secret_santa_email(.x,.y))
+    walk2(gifts_assigned$email,gifts_assigned$recipient,~send_secret_santa_email(.x,.y,"yahoo_credential"))
     }
 
     assign_batch_emails(participants)
