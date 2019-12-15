@@ -24,7 +24,7 @@ the participants
     "Phoebe",  "phoebe_friends@gmail.com",
     "Joey", "joey_friends@gmail.com",
     "Chandler", "chandler_friends@gmail.com",
-    "Ross", "ross_friends@gmail.com",)
+    "Ross", "ross_friends@gmail.com")
     participants
 
 In order to be able to send an email from R we first need to create a
