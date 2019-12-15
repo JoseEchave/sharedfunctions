@@ -65,13 +65,13 @@ and email to each with the info, use the following function. Inspiration
 for the shuffling taken from:
 <a href="https://selbydavid.com/2016/12/07/santa/" class="uri">https://selbydavid.com/2016/12/07/santa/</a>
 
-    assign_batch_emails <- function(names_email){
+    assign_batch_emails <- function(names_email,mail_cred_file){
       shuffle_names <- sample(names_email$name)
      gifts_assigned <-  tibble(sender = shuffle_names,
                recipient = c(tail(shuffle_names, -1), shuffle_names[1])) %>% 
       left_join(names_email,by = c("sender" = "name"))
 
-    walk2(gifts_assigned$email,gifts_assigned$recipient,~send_secret_santa_email(.x,.y,"yahoo_credential"))
+    walk2(gifts_assigned$email,gifts_assigned$recipient,~send_secret_santa_email(.x,.y,mail_cred_file))
     }
 
     assign_batch_emails(participants)
