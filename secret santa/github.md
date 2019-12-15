@@ -46,7 +46,7 @@ customized.
 
     This is secret Santa. My job is to delegate giving presents.
 
-    You need to give a present to Monica"),
+    You need to give a present to {gift_recipient}"),
     footer = "All done in R")
      
      email %>%
