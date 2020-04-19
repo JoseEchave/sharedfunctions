@@ -9,7 +9,6 @@ output: html_notebook
 library(ggplot2)
 library(stringr)
 library(magick)
-library(purrr)
 #Save ggplot in defined foder and with timestamp
 save_plot_date <- function(folder){
   ggsave(paste0(folder,"/plot_",str_replace_all(Sys.time(),":|-| ","_"),".png"))
