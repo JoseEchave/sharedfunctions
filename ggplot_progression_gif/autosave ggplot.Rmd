@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r  }
+library(ggplot2)
+library(stringr)
+library(magick)
+library(purrr)
+#Save ggplot in defined foder and with timestamp
+save_plot_date <- function(folder){
+  ggsave(paste0(folder,"/plot_",str_replace_all(Sys.time(),":|-| ","_"),".png"))
+}
+#Overwrite ggplot render method to force ggsave with previously defined function
+print.ggplot = function(x, ...) {
+  save_plot_date("temp_output")
+  ggplot2:::print.ggplot(x, ...)
+}
+
+```
+```{r}
+ggplot(mtcars, aes(mpg,cyl)) + 
+  geom_point()
+```
+
+
+```{r}
+ggplot(mtcars, aes(mpg,cyl,color = as.character(gear))) +
+  geom_point()
+```
+
+
+```{r}
+ggplot(mtcars, aes(mpg,cyl,color = as.character(gear))) +
+  geom_point() +
+  facet_wrap(~am)
+```
+
+
+
+```{r}
+ggplot(mtcars, aes(mpg,cyl,color = as.character(gear))) +
+  geom_point() +
+  facet_wrap(~am) +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(mtcars, aes(mpg,cyl,color = as.character(gear))) +
+  geom_point() +
+  facet_wrap(~am) +
+  theme_minimal() +
+  labs(title = "useless plot to show the feature")
+```
+
+#Create gif
+With magick package
+
+```{r}
+create_gif <- list.files(path = "temp_output/", pattern = "*.png", full.names = T) %>% 
+  image_read %>% # reads each image file
+  image_join() %>% # joins image
+  image_animate(fps=2) %>% # animates, can opt for number of loops
+  image_write("merged_pngs.gif")
+```
+
