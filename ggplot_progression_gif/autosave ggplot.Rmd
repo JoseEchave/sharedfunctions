@@ -3,21 +3,23 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-
+Start by creating folder called "temp_plots" in working directory
 
 ```{r  }
+#Libraries
 library(ggplot2)
 library(stringr)
-library(magick)
-#Save ggplot in defined foder and with timestamp
-save_plot_date <- function(folder){
-  ggsave(paste0(folder,"/plot_",str_replace_all(Sys.time(),":|-| ","_"),".png"))
+
+#Functions
+save_plot_date <- function(folder = "temp_plots"){
+  ggsave(here::here(paste0(folder,"/plot_",stringr::str_replace_all(Sys.time(),":|-| ","_"),".png")))
 }
-#Overwrite ggplot render method to force ggsave with previously defined function
-print.ggplot = function(x, ...) {
-  save_plot_date("temp_output")
+ggplot_print_replace <- function(x, ...) {
+  save_plot_date("temp_plots")
   ggplot2:::print.ggplot(x, ...)
 }
+#Replace ggplot print method
+print.ggplot <- ggplot_print_replace
 
 ```
 ```{r}
@@ -57,13 +59,24 @@ ggplot(mtcars, aes(mpg,cyl,color = as.character(gear))) +
 ```
 
 #Create gif
-With magick package
+By calling magick from the command line.
+Install pagick from here
+https://imagemagick.org/script/download.php
+Mac -> https://imagemagick.org/script/download.php#macosx
+Windows -> https://imagemagick.org/script/download.php#windows
+
+If you want the final picture to be shown for longer, just copy paste it multiple times so that it is shown for longer.
 
 ```{r}
-create_gif <- list.files(path = "temp_output/", pattern = "*.png", full.names = T) %>% 
-  image_read %>% # reads each image file
-  image_join() %>% # joins image
-  image_animate(fps=2) %>% # animates, can opt for number of loops
-  image_write("merged_pngs.gif")
-```
+#Create gif function
+create_gif_from_pic <- function(folder = "temp_plots", gif_name = "tidytuesday_progresion"){
+  cmd <- paste(glue::glue('cd {here::here(folder)}'), "&&",
+    glue::glue('magick convert -resize 50%  -delay 10 -loop 0 *.png {gif_name}.gif'))
+shell(cmd)
+}
+#Call function
+create_gif_from_pic()
 
+
+```
+Gif is created in the temp_plots folder
